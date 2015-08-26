@@ -1,0 +1,3 @@
+[submodule "thinnect.tos-groundlib"]
+	path = thinnect.tos-groundlib
+	url = git@github.com:thinnect/tos-groundlib.git
