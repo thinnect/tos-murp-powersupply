@@ -5,7 +5,7 @@
 generic module PSTestP(uint32_t g_read_period) {
 	uses {
 		interface SplitControl as PrintfControl;
-		interface Read<int16_t>; // mV
+		interface Read<uint32_t> as Read[uint8_t n]; // mV
 		interface Boot;
 		interface Timer<TMilli>;
 	}
@@ -22,7 +22,7 @@ implementation {
 
 	event void PrintfControl.startDone(error_t err) {
 		debug1("started");
-		call Timer.startOneShot(g_read_period);
+		call Timer.startPeriodic(g_read_period);
 	}
 
 	event void PrintfControl.stopDone(error_t err) {
@@ -30,18 +30,22 @@ implementation {
 	}
 
 	event void Timer.fired() {
-		error_t err = call Read.read();
+		error_t err = call Read.read[0]();
 		logger(err == SUCCESS ? LOG_DEBUG1: LOG_ERR1, "read=%u", err);
 	}
 
-	event void Read.readDone(error_t err, int16_t value) {
+	event void Read.readDone[uint8_t n](error_t err, uint32_t value) {
 		if(err == SUCCESS) {
-			info1("voltage %d mV", value);
+			info1("voltage[%u] %"PRIu32" mV", n, value);
+			call Read.read[n+1]();
 		}
 		else {
-			err1("readDone(%u, %d)", err, value);
+			err1("rd[%u](%u, %"PRIu32")", err, value);
 		}
-		call Timer.startOneShot(g_read_period);
+	}
+
+	default command error_t Read.read[uint8_t n]() {
+		return FAIL;
 	}
 
 }

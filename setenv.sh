@@ -30,14 +30,5 @@ popd  > /dev/null
 popd  > /dev/null
 # -----------------------------------------------------------------------------
 
-export WORKSPACE_ROOT=$WORKSPACE_ROOT
-echo WORKSPACE_ROOT=$WORKSPACE_ROOT
-
-export TOSROOT=$WORKSPACE_ROOT/tinyos
-echo TOSROOT=$TOSROOT
-
-export TOSDIR=$TOSROOT/tos
-export CLASSPATH=$CLASSPATH:$TOSROOT/support/sdk/java/tinyos.jar
-export MAKERULES=$TOSROOT/support/make/Makerules
-
-
+# include the base of this repo as an additional TinyOS root
+TINYOS_ROOT_DIR_ADDITIONAL=$TINYOS_ROOT_DIR_ADDITIONAL:$SCRIPT_PATH
