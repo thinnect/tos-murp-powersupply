@@ -17,7 +17,7 @@ generic module InputVoltageReadM(uint8_t g_clients, uint32_t g_reference_mV, uin
 implementation {
 
 	#define __MODUUL__ "ivr"
-	#define __LOG_LEVEL__ ( LOG_LEVEL_InputVoltageReadP & BASE_LOG_LEVEL )
+	#define __LOG_LEVEL__ ( LOG_LEVEL_InputVoltageReadM & BASE_LOG_LEVEL )
 	#include "log.h"
 
 	bool m_busy[g_clients];
