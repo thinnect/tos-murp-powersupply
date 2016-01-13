@@ -9,8 +9,11 @@ generic configuration VddVoltageReadP(uint8_t g_clients, uint32_t g_delay_ms) {
 }
 implementation {
 
-	components new VddVoltageReadM(g_clients, g_delay_ms);
-	VoltageRead = VddVoltageReadM.VoltageRead;
+	components new VirtualizeReadC(g_clients, uint32_t);
+	VoltageRead = VirtualizeReadC.Read;
+
+	components new VddVoltageReadM(g_delay_ms);
+	VirtualizeReadC.SubRead -> VddVoltageReadM.VoltageRead;
 
 	components new AdcReadClientC() as VddReadClientC;
 	VddVoltageReadM.Read -> VddReadClientC;
@@ -20,8 +23,5 @@ implementation {
 
 	components new TimerMilliC();
 	VddVoltageReadM.Timer -> TimerMilliC;
-
-	components MainC;
-	MainC.SoftwareInit -> VddVoltageReadM.Init;
 
 }

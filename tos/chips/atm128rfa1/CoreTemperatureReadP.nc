@@ -9,8 +9,11 @@ generic configuration CoreTemperatureReadP(uint8_t g_clients, uint32_t g_delay_m
 }
 implementation {
 
-	components new CoreTemperatureReadM(g_clients, g_delay_ms);
-	TemperatureRead = CoreTemperatureReadM.TemperatureRead;
+	components new VirtualizeReadC(g_clients, float);
+	TemperatureRead = VirtualizeReadC.Read;
+
+	components new CoreTemperatureReadM(g_delay_ms);
+	VirtualizeReadC.SubRead -> CoreTemperatureReadM.TemperatureRead;
 
 	components new AdcReadClientC();
 	CoreTemperatureReadM.Read -> AdcReadClientC;
@@ -20,8 +23,5 @@ implementation {
 
 	components new TimerMilliC();
 	CoreTemperatureReadM.Timer -> TimerMilliC;
-
-	components MainC;
-	MainC.SoftwareInit -> CoreTemperatureReadM.Init;
 
 }

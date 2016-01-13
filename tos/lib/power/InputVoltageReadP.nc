@@ -14,16 +14,16 @@ generic configuration InputVoltageReadP(uint8_t g_clients, uint32_t g_reference_
 }
 implementation {
 
-	components new InputVoltageReadM(g_clients, g_reference_mV, g_high_resistor, g_low_resistor, g_delay_ms);
-	VoltageRead = InputVoltageReadM.VoltageRead;
+	components new VirtualizeReadC(g_clients, uint32_t);
+	VoltageRead = VirtualizeReadC.Read;
+
+	components new InputVoltageReadM(g_reference_mV, g_high_resistor, g_low_resistor, g_delay_ms);
+	VirtualizeReadC.SubRead -> InputVoltageReadM.VoltageRead;
 	InputVoltageReadM.Read = Read;
 	InputVoltageReadM.ReadPin = ReadPin;
 	InputVoltageReadM.SinkPin = SinkPin;
 
 	components new TimerMilliC();
 	InputVoltageReadM.Timer -> TimerMilliC;
-
-	components MainC;
-	MainC.SoftwareInit -> InputVoltageReadM.Init;
 
 }
