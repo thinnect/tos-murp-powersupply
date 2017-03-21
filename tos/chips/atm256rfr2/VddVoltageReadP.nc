@@ -2,6 +2,7 @@
  * @author Raido Pahtma
  * @license MIT
 */
+#include "Atm128Adc.h"
 generic configuration VddVoltageReadP(uint8_t g_clients, uint32_t g_delay_ms) {
 	provides {
 		interface Read<uint32_t> as VoltageRead[uint8_t client];
