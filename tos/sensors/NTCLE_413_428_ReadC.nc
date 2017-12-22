@@ -1,3 +1,9 @@
+/**
+ * Progmem table based interpolation for NTCLE_413_428
+ *
+ * @author Raido Pahtma
+ * @license MIT
+ */
 #include "ProgmemInterpolation.h"
 module NTCLE_413_428_ReadC {
 	provides interface Read<float>[uint8_t id];

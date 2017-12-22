@@ -1,3 +1,9 @@
+/**
+ * Progmem table based interpolation for a random linear light sensor.
+ *
+ * @author Raido Pahtma
+ * @license MIT
+ */
 #include "ProgmemInterpolation.h"
 module LinearLightTableC {
 	provides interface Read<float>[uint8_t id];
