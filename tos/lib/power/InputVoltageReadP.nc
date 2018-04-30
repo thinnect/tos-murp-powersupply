@@ -8,6 +8,7 @@ generic configuration InputVoltageReadP(uint8_t g_clients, uint32_t g_reference_
 	}
 	uses {
 		interface Read<uint16_t>;
+		interface GeneralIO as EnablePin;
 		interface GeneralIO as ReadPin;
 		interface GeneralIO as SinkPin;
 	}
@@ -20,6 +21,7 @@ implementation {
 	components new InputVoltageReadM(g_reference_mV, g_high_resistor, g_low_resistor, g_delay_ms);
 	VirtualizeReadC.SubRead -> InputVoltageReadM.VoltageRead;
 	InputVoltageReadM.Read = Read;
+	InputVoltageReadM.EnablePin = EnablePin;
 	InputVoltageReadM.ReadPin = ReadPin;
 	InputVoltageReadM.SinkPin = SinkPin;
 

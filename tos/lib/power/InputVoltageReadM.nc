@@ -6,8 +6,9 @@ generic module InputVoltageReadM(uint32_t g_reference_mV, uint32_t g_high_resist
 	provides interface Read<uint32_t> as VoltageRead;
 	uses {
 		interface Read<uint16_t>;
+		interface GeneralIO as EnablePin; // Set for sampling
 		interface GeneralIO as ReadPin;
-		interface GeneralIO as SinkPin;
+		interface GeneralIO as SinkPin;   // Cleared for sampling
 		interface Timer<TMilli>;
 	}
 }
@@ -31,6 +32,8 @@ implementation {
 		if(!m_busy) {
 			debug1("read");
 			m_busy = TRUE;
+			call EnablePin.makeOutput();
+			call EnablePin.set();
 			call SinkPin.makeOutput();
 			call SinkPin.clr(); // Sink the current
 			call ReadPin.makeInput();
@@ -46,6 +49,8 @@ implementation {
 		uint32_t voltage = (uint32_t)g_reference_mV*value*(g_high_resistor + g_low_resistor)/g_low_resistor/1024;
 		debug1("rd(%u, %u)", result, value);
 		m_busy = FALSE;
+		call EnablePin.makeInput();
+		call EnablePin.clr();
 		call SinkPin.makeInput();
 		call SinkPin.set(); // Pull up
 		call ReadPin.set(); // Pull up
